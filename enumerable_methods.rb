@@ -1,0 +1,82 @@
+module Enumerable
+	def my_each
+		copy = self
+		copy.length.times do |index|
+			yield self[index]
+		end
+	end
+
+	def my_each_with_index
+		copy = self
+		copy.length.times do |index|
+			yield(copy[index], index)
+		end
+	end
+	def my_select
+		copy = self
+		arr = []
+		for element in copy
+			if yield(element)
+				arr.push(element)
+			end
+		end
+		arr
+	end
+	def my_all?
+		copy = self
+		result = true
+		for element in copy
+			if !yield(element)
+				result = false
+			end
+		end
+		result
+	end
+
+	def my_any?
+		self.each do |item|
+			if yield
+				return true
+			end
+		end
+		false
+	end
+
+	def my_none?
+		if self.length == 0
+			true
+		else
+			false
+		end
+	end
+
+	def my_count
+		self.length
+	end
+
+	def my_map(proc=nil)
+		mapped = []
+		if proc != nil
+			self.my_each do |item|
+				mapped.push(proc.call(item))
+			end
+		else
+			self.my_each do |item|
+				mapped.push(yield(item))
+			end 	
+		end	
+	end
+
+	def my_inject(initial=0)
+		result = 0
+		if initial!= 0
+			result = initial
+		else
+			result = self[0]
+		end
+		self.my_each do |item|
+			yield(result, item)
+		end
+		result
+	end
+end
